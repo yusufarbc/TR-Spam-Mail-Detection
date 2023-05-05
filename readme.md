@@ -135,7 +135,7 @@ len(data)
 Data pre-processing is a critical step in data analysis and machine learning as it helps to ensure that the data is accurate, consistent, and useful for further analysis. We will clean, transform, and organize the data.
 
 punc holds a list of punctuation and symbols.
-sw holds a list of stopwords.
+sw holds a list of stopwords. Obtained from https://raw.githubusercontent.com/stopwords-iso/stopwords-tr/master/stopwords-tr.txt
 
 For every record in data, for every item (symbol or punctuation) in punc, replace the item with an empty string, to delete the item from email text string.
 

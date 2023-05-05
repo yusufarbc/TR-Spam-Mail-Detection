@@ -6,7 +6,7 @@
 In this project, we're using Python3 and its data-mining modules for developing a machine learning model.
 - string module for list of punctuation.
 - csv module for reading data set.
-- numpy to allow advanced array manipulation.
+- numpy and pandas for advance array manipulation.
 - matplotlib to draw various plots.
 - train_test_split to split the data into training and test data.
 - accuracy_score to calculate accuracy of algorithms.
@@ -17,6 +17,7 @@ In this project, we're using Python3 and its data-mining modules for developing 
 import string
 import csv
 import numpy as np 
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score

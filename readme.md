@@ -165,6 +165,9 @@ for record in data:
 
     Preprocessing data...
 
+## Data Visualization
+
+lorem ipsum complete
 
 ## Determine Train and Test Set
 

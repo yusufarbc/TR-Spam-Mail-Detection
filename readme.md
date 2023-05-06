@@ -316,7 +316,7 @@ tsize = len(test_data)
 
 ```python
 # Declare K Value
-K = 11
+K = 24
 ```
 
 
@@ -358,9 +358,8 @@ print("Number wrong\t\t: " + str(int((1 - accuracy) * tsize)))
 
     training data size	: 577
     test data size		: 248
-    K value			: 11
+    K value			: 24
     Samples tested		: 248
-    % accuracy		: 41.935483870967744
-    Number correct		: 104
-    Number wrong		: 143
-
+    % accuracy		: 42.74193548387097
+    Number correct		: 106
+    Number wrong		: 141

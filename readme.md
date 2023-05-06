@@ -168,24 +168,140 @@ for record in data:
 
 ## Data Visualization
 
-lorem ipsum complete
 
-## Determine Train and Test Set
+```python
+# Histogram By Word Count
+count_ham_list=[]
+count_spam_list=[]
+for record in data:
+    word_count = len(record[0].split())
+    if record[1] == "ham":
+        count_ham_list.append(word_count)
+    else:
+        count_spam_list.append(word_count)
+        
+plt.title("Histogram of ham E-mails' word counts")
+plt.hist(count_ham_list, bins=40)
+plt.show()
 
-The data set splits into a training set (70%) and a testing set (30%). We use "train_test_split" for that.
+plt.title("Histogram of spam E-mails' word counts")
+plt.hist(count_spam_list, bins=40)
+plt.show()
+```
+
+
+    
+![png](output_10_0.png)
+    
+
+
+
+    
+![png](output_10_1.png)
+    
+
 
 
 ```python
-# Splitting the Data into Training and Testing Sets
-print("Splitting data...")
-features = data[:, 0]   # array containing all email text bodies
-labels = data[:, 1]     # array containing corresponding labels
-training_data, test_data, training_labels, test_labels =\
-train_test_split(features, labels, test_size = 0.30, random_state = 42)
+# Calculate Word Frequency
+frequency_ham_word_list=[]
+frequency_ham_count_list=[]
+
+frequency_spam_word_list=[]
+frequency_spam_count_list=[]
+
+for record in data:
+    words = record[0].split()
+    if record[1] == "ham":     
+        for word in words:
+            if word in frequency_ham_word_list:
+                index = frequency_ham_word_list.index(word)
+                frequency_ham_count_list[index] += 1
+            else:
+                frequency_ham_word_list.append(word)
+                frequency_ham_count_list.append(1)
+    else:
+        for word in words:
+            if word in frequency_spam_word_list:
+                index = frequency_spam_word_list.index(word)
+                frequency_spam_count_list[index] += 1
+            else:
+                frequency_spam_word_list.append(word)
+                frequency_spam_count_list.append(1)
+    
+
 ```
 
-    Splitting data...
 
+```python
+# Simplify Word Frequency
+index = len(frequency_ham_count_list) - 1
+while(index > 0):
+    count = frequency_ham_count_list[index]
+    if count < 100 or count > 150:
+        del(frequency_ham_count_list[index])
+        del(frequency_ham_word_list[index])
+    index -= 1
+    
+index = len(frequency_spam_count_list) - 1
+while(index > 0):
+    count = frequency_spam_count_list[index]
+    if count < 100 or count > 150:
+        del(frequency_spam_count_list[index])
+        del(frequency_spam_word_list[index])
+    index -= 1
+    
+print(len(frequency_ham_count_list))
+
+
+print(len(frequency_spam_word_list))
+
+```
+
+    20
+    43
+
+
+
+```python
+# The most used words in ham E-Mails 
+plt.title("The most used words in ham E-mails")
+plt.rcParams["figure.figsize"] = (20,3)
+plt.bar(frequency_ham_word_list, frequency_ham_count_list)
+plt.show()
+print(frequency_ham_word_list)
+```
+
+
+    
+![png](output_13_0.png)
+    
+
+
+    ['selamun', 'zaman', 'size', 'mi', 'bir', 'with', 'your', 'cevap', '3', 'live\x99', '2', 'bilgi', 'if', 'this', 'border3d0', 'table', 'br', 'spam', 'web', 'eposta']
+
+
+
+```python
+# The most used words in spam E-Mails 
+plt.title("The most used words in spam E-mails")
+plt.rcParams["figure.figsize"] = (20,3)
+plt.bar(frequency_spam_word_list, frequency_spam_count_list)
+plt.show()
+print(frequency_spam_word_list)
+```
+
+    /usr/lib/python3/dist-packages/IPython/core/pylabtools.py:151: UserWarning: Glyph 3 () missing from current font.
+      fig.canvas.print_figure(bytes_io, **kw)
+
+
+
+    
+![png](output_14_1.png)
+    
+
+
+    ['sayın', 'mezunları', 'memuru', 'kpss', 'kadro', 'yer', 'bölümü', 'sahip', 'bilgileri', 'genel', 'eğitim', 'insan', 'nitelik', 'memur', 'i̇dari', 'i̇i̇bf', 'kalite', 'k', 'h', 'teknikleri', 'yeni', 'kdv', 'firma', 'ie7in', '6', 'sirket', 'urun', 'musteri', 'icin', 'ed0ddtddmdd', 'ef0itim', 'siparife', 'egitim', 'satis', '10', 'and', 'the', 'for', 'egitimi', 'isletme', 'yonetim', 'a7', '\x03']
 
 ## The KNN Model
 

@@ -1,15 +1,14 @@
-# encoding: utf-8
 
-# import modules
-import os
+# Turkish Spam Data Set Classification with KNN
+
+# importing modules
 import string
 import csv
 import numpy as np 
-import pandas as pd 
+import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-
 
 # The KNN Algorithm
 def get_count(text):
@@ -77,12 +76,12 @@ def knn_classifier(training_data, training_labels, test_data, K, tsize):
 # Loading the Data
 print("Loading data...")
 data = []
-with open("trspam.csv", "r") as f:
+with open("trspam.csv", "r", encoding="utf-8") as f:
     reader = csv.reader(f)
     for row in reader:
         label = str(row[-1])
         del row[-1]
-        text = str(row)
+        text = ''.join(row)
         
         data.append([text, label])
 del data[0]
@@ -96,7 +95,9 @@ len(data)
 # Data Pre-Processing
 print("Preprocessing data...")
 punc = string.punctuation       # Punctuation list
-sw = pd.read_csv("stopwords-tr.txt", encoding='utf-8')    # Stopwords list
+
+with open("stopwords-tr.txt", "r", encoding="utf-8") as f:
+    sw = f.read().splitlines()
 
 for record in data:
         # Remove common punctuation and symbols
@@ -113,8 +114,93 @@ for record in data:
         record[0] = newText
 
 
+# Histogram By Word Count
+count_ham_list=[]
+count_spam_list=[]
+for record in data:
+    word_count = len(record[0].split())
+    if record[1] == "ham":
+        count_ham_list.append(word_count)
+    else:
+        count_spam_list.append(word_count)
+        
+plt.title("Histogram of ham E-mails' word counts")
+plt.hist(count_ham_list, bins=40)
+plt.show()
+plt.savefig('hist_ham.png')
+
+plt.title("Histogram of spam E-mails' word counts")
+plt.hist(count_spam_list, bins=40)
+plt.show()
+plt.savefig('hist_spam.png')
+
+# Calculate Word Frequency
+frequency_ham_word_list=[]
+frequency_ham_count_list=[]
+
+frequency_spam_word_list=[]
+frequency_spam_count_list=[]
+
+for record in data:
+    words = record[0].split()
+    if record[1] == "ham":     
+        for word in words:
+            if word in frequency_ham_word_list:
+                index = frequency_ham_word_list.index(word)
+                frequency_ham_count_list[index] += 1
+            else:
+                frequency_ham_word_list.append(word)
+                frequency_ham_count_list.append(1)
+    else:
+        for word in words:
+            if word in frequency_spam_word_list:
+                index = frequency_spam_word_list.index(word)
+                frequency_spam_count_list[index] += 1
+            else:
+                frequency_spam_word_list.append(word)
+                frequency_spam_count_list.append(1)
+
+# Simplify Word Frequency
+index = len(frequency_ham_count_list) - 1
+while(index > 0):
+    count = frequency_ham_count_list[index]
+    if count < 100 or count > 150:
+        del(frequency_ham_count_list[index])
+        del(frequency_ham_word_list[index])
+    index -= 1
+    
+index = len(frequency_spam_count_list) - 1
+while(index > 0):
+    count = frequency_spam_count_list[index]
+    if count < 100 or count > 150:
+        del(frequency_spam_count_list[index])
+        del(frequency_spam_word_list[index])
+    index -= 1
+    
+print(len(frequency_ham_count_list))
+
+
+print(len(frequency_spam_word_list))
+
+# The most used words in ham E-Mails 
+plt.title("The most used words in ham E-mails")
+plt.rcParams["figure.figsize"] = (20,3)
+plt.bar(frequency_ham_word_list, frequency_ham_count_list)
+plt.show()
+plt.savefig('_ham.png')
+print(frequency_ham_word_list)
+
+# The most used words in spam E-Mails 
+plt.title("The most used words in spam E-mails")
+plt.rcParams["figure.figsize"] = (20,3)
+plt.bar(frequency_spam_word_list, frequency_spam_count_list)
+plt.show()
+plt.savefig('plt_spam.png')
+print(frequency_spam_word_list)
+
+
+
 # Splitting the Data into Training and Testing Sets
-# The data set is split into a training set (70%) and a testing set (30%).
 print("Splitting data...")
 features = data[:, 0]   # array containing all email text bodies
 labels = data[:, 1]     # array containing corresponding labels
@@ -123,16 +209,20 @@ training_data, test_data, training_labels, test_labels =train_test_split(feature
 # Determine Test Size
 tsize = len(test_data)
 
+
 # Declare K Value
-K = 11
+K = 24
+
 
 # Model Training
 print("Model Training...")
 result = knn_classifier(training_data, training_labels, test_data[:tsize], K, tsize) 
 
+
 # Model Test
 print("Model Testing...")
 accuracy = accuracy_score(test_labels[:tsize], result)
+
 
 # Results
 print("training data size\t: " + str(len(training_data)))

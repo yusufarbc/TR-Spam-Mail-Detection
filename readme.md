@@ -1,5 +1,4 @@
 # Turkish Spam Data Set Classification with KNN
-### Developed by [Yusuf T. ARABACI](https://github.com/yusufarbc) and [Melike YOĞURTCU](https://github.com/melikeyogurtcu)
 
 ## Importing Modules
 
